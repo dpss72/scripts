@@ -70,3 +70,7 @@ sudo usermod -a -G vboxusers $USER
 newgrp vboxusers
 id $USER
 
+https://github.com/Automattic/simplenote-electron/releases/tag/v2.21.0
+
+https://gist.github.com/craftyc0der/3cbdb1f9ed60aa94f8cfc0f54b719b95 
+
