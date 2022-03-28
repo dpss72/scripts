@@ -38,7 +38,7 @@ sudo fwupdmgr get-updates
 sudo fwupdmgr update
 
 echo "Installing Software"
-sudo dnf install -y gnome-extensions-app gnome-tweaks gnome-shell-extension-appindicator vlc flatseal htop git dnfdragora rdesktop audacious mscore-fonts-all neofetch cmatrix p7zip unzip gparted
+sudo dnf install -y gnome-extensions-app gnome-tweaks gnome-shell-extension-appindicator vlc flatseal htop bleachbit git dnfdragora rdesktop audacious mscore-fonts-all neofetch cmatrix p7zip unzip gparted
 
 echo "Installing Appearance Tweaks - Flat GTK and Icon Theme"
 sudo dnf install -y gnome-shell-extension-user-theme paper-icon-theme flat-remix-icon-theme flat-remix-theme
@@ -129,6 +129,29 @@ sudo snap install pycharm-community --classic
 sudo snap install intellij-idea-community --classic
 
 flatpak install flathub com.spotify.Client
+
+sudo dnf copr enable kwizart/fedy
+sudo dnf install fedy -y
+
+sudo dnf install tlp tlp-rdw
+sudo systemctl enable tlp
+
+sudo fwupdmgr get-devices
+sudo fwupdmgr refresh --force
+sudo fwupdmgr get-updates
+sudo fwupdmgr update
+
+sudo dnf install gnome-shell-extension-dash-to-dock
+sudo dnf install gnome-shell-extension-appindicator
+sudo dnf install gnome-shell-extension-gsconnect.x86_64
+
+sudo dnf group install "Development Tools"
+
+sudo dnf -y install bridge-utils libvirt virt-install qemu-kvm
+sudo dnf install libvirt-devel virt-top libguestfs-tools guestfs-tools
+sudo systemctl start libvirtd
+sudo systemctl enable libvirtd
+sudo dnf -y install virt-manager
 
 
 echo "Doing DNF cleanup"
