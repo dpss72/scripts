@@ -1,1 +1,26 @@
-todo
+Nvidia
+
+If you have a Nvidia card, run Xorg and the following:
+
+modinfo -F version nvidia
+sudo dnf update -y # and reboot if you are not on the latest kernel
+sudo dnf install -y akmod-nvidia # rhel/centos users can use kmod-nvidia instead
+sudo dnf install -y xorg-x11-drv-nvidia-cuda #optional for cuda/nvdec/nvenc support
+sudo dnf install -y xorg-x11-drv-nvidia-cuda-libs
+sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils
+sudo dnf install -y vulkan
+modinfo -F version nvidia
+
+Set hostname
+
+By default my machine is called localhost; hence, I rename it for better accessability on the network:
+
+hostnamectl set-hostname fedora
+
+btrfs filesystem optimizations
+
+sudo nano /etc/fstab
+
+And add below options to btrfs mounts
+
+,ssd,noatime,space_cache,commit=120,compress=zstd,discard=async
