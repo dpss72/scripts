@@ -53,4 +53,7 @@ sudo dnf install -y microsoft-edge-stable
 
 echo "Doing DNF cleanup"
 sudo dnf clean all
+
+wget "https://sl.diltech.com/fedora_readme" -O ./readme.txt
+echo "Read ./readme.txt for manual steps"
 exit 0
