@@ -24,3 +24,49 @@ sudo nano /etc/fstab
 And add below options to btrfs mounts
 
 ,ssd,noatime,space_cache,commit=120,compress=zstd,discard=async
+
+Install Nextcloud and Dropbox
+
+I have to install a sync client to access some of my files on my Nextcloud server.
+
+$ sudo dnf install -y nextcloud-client nextcloud-client-nautilus #Nextcloud
+
+$ sudo dnf install -y dropbox nautilus-dropbox #Dropbox
+
+Open Nextcloud and dropbox and set up your account to manage your files.
+
+Wine install, 
+
+change 35 to your version
+
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://dl.winehq.org/wine-builds/fedora/35/winehq.repo
+sudo dnf -y install winehq-stable
+
+winecfg
+
+wget  https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
+chmod +x winetricks
+sudo mv winetricks /usr/local/bin/
+
+sudo dnf -y install @development-tools
+sudo dnf -y install kernel-headers kernel-devel dkms elfutils-libelf-devel qt5-qtx11extras
+
+cat <<EOF | sudo tee /etc/yum.repos.d/virtualbox.repo 
+[virtualbox]
+name=Fedora $releasever - $basearch - VirtualBox
+baseurl=http://download.virtualbox.org/virtualbox/rpm/fedora/34/\$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://www.virtualbox.org/download/oracle_vbox.asc
+EOF
+
+sudo dnf search virtualbox
+
+sudo dnf install VirtualBox-6.1
+
+sudo usermod -a -G vboxusers $USER
+newgrp vboxusers
+id $USER
+
