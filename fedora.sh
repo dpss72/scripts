@@ -38,7 +38,7 @@ sudo fwupdmgr get-updates
 sudo fwupdmgr update
 
 echo "Installing Software"
-sudo dnf install -y gnome-extensions-app gnome-tweaks gnome-shell-extension-appindicator vlc flatseal dnfdragora audacious mscore-fonts-all neofetch cmatrix p7zip unzip gparted
+sudo dnf install -y gnome-extensions-app gnome-tweaks gnome-shell-extension-appindicator vlc flatseal htop git dnfdragora rdesktop audacious mscore-fonts-all neofetch cmatrix p7zip unzip gparted
 
 echo "Installing Appearance Tweaks - Flat GTK and Icon Theme"
 sudo dnf install -y gnome-shell-extension-user-theme paper-icon-theme flat-remix-icon-theme flat-remix-theme
@@ -63,6 +63,7 @@ sudo dnf install -y microsoft-edge-stable
 
 echo "Installing snap"
 sudo dnf install -y snapd
+sudo systemctl enable snapd --now
 sudo ln -s /var/lib/snapd/snap /snap
 
 echo "Installing Codecs"
@@ -73,6 +74,62 @@ sudo dnf install -y lame\* --exclude=lame-devel
 sudo dnf group upgrade --with-optional Multimedia
 sudo dnf config-manager --set-enabled fedora-cisco-openh264
 sudo dnf install -y gstreamer1-plugin-openh264 mozilla-openh264
+
+sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
+sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+sudo dnf install brave-browser
+
+sudo dnf install dnf-utils
+sudo dnf config-manager --add-repo https://repo.vivaldi.com/archive/vivaldi-fedora.repo
+sudo dnf install vivaldi-stable
+
+sudo tee /etc/yum.repos.d/AnyDesk-Fedora.repo <<EOF
+[anydesk]
+name=AnyDesk Fedora - stable
+baseurl=http://rpm.anydesk.com/fedora/x86_64/
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=https://keys.anydesk.com/repos/RPM-GPG-KEY
+EOF
+sudo dnf --releasever=32 install pangox-compat.x86_64
+sudo dnf makecache
+sudo dnf install redhat-lsb-core anydesk
+
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+cat <<EOF | sudo tee /etc/yum.repos.d/vscode.repo
+[code]
+name=Visual Studio Code
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+EOF
+dnf check-update
+sudo dnf install code
+
+sudo dnf -y install wget
+wget https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
+sudo dnf -y install ./teamviewer.x86_64.rpm
+rm -f ./teamviewer.x86_64.rpm
+
+sudo bash -c 'cat << EOF > /etc/yum.repos.d/atom.repo
+[Atom]
+name=Atom Editor
+baseurl=https://packagecloud.io/AtomEditor/atom/el/7/x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=1
+gpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey
+EOF'
+sudo rpm --import https://packagecloud.io/AtomEditor/atom/gpgkey
+sudo dnf update
+sudo dnf install atom
+
+sudo snap install pycharm-community --classic
+sudo snap install intellij-idea-community --classic
+
+flatpak install flathub com.spotify.Client
+
 
 echo "Doing DNF cleanup"
 sudo dnf clean all
