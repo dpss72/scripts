@@ -24,11 +24,21 @@ echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
 echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
 notify-send "Your DNF config has now been amended" --expire-time=10
 
+echo "Install flatpak"
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak update
 
+echo "Install updates"
+sudo dnf upgrade --refresh
+sudo dnf check
+sudo dnf autoremove
+sudo fwupdmgr get-devices
+sudo fwupdmgr refresh --force
+sudo fwupdmgr get-updates
+sudo fwupdmgr update
+
 echo "Installing Software"
-sudo dnf install -y gnome-extensions-app gnome-tweaks gnome-shell-extension-appindicator vlc dnfdragora audacious mscore-fonts-all neofetch cmatrix p7zip unzip gparted
+sudo dnf install -y gnome-extensions-app gnome-tweaks gnome-shell-extension-appindicator vlc flatseal dnfdragora audacious mscore-fonts-all neofetch cmatrix p7zip unzip gparted
 
 echo "Installing Appearance Tweaks - Flat GTK and Icon Theme"
 sudo dnf install -y gnome-shell-extension-user-theme paper-icon-theme flat-remix-icon-theme flat-remix-theme
@@ -50,6 +60,19 @@ sudo rpm -v --import https://packages.microsoft.com/keys/microsoft.asc
 sudo dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
 sudo mv /etc/yum.repos.d/packages.microsoft.com_yumrepos_edge.repo /etc/yum.repos.d/microsoft-edge.repo
 sudo dnf install -y microsoft-edge-stable
+
+echo "Installing snap"
+sudo dnf install -y snapd
+sudo ln -s /var/lib/snapd/snap /snap
+
+echo "Installing Codecs"
+sudo dnf groupupdate sound-and-video
+sudo dnf install -y libdvdcss
+sudo dnf install -y gstreamer1-plugins-{bad-\*,good-\*,ugly-\*,base} gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel ffmpeg gstreamer-ffmpeg 
+sudo dnf install -y lame\* --exclude=lame-devel
+sudo dnf group upgrade --with-optional Multimedia
+sudo dnf config-manager --set-enabled fedora-cisco-openh264
+sudo dnf install -y gstreamer1-plugin-openh264 mozilla-openh264
 
 echo "Doing DNF cleanup"
 sudo dnf clean all
